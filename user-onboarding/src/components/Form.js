@@ -71,8 +71,12 @@ const CustomUserForm = styled.div`
         min-height: 100px;
     }
 
-    .email{
+    .userInfo{
         color: grey;
+    }
+
+    .roleSelect, label{
+        margin-bottom: 20px;
     }
 `
 
@@ -102,6 +106,29 @@ const UserForm = ({values, errors, touched, status}) => {
                     {touched.password && errors.password && <p className='error'>{errors.password}</p>}
                 </div>
 
+                <Field as='select' name='role' className='roleSelect'>
+                    <option disabled value='select'>Select a Role...</option>
+                    <option value='student'>Student</option>
+                    <option value='teacher'>Teacher</option>                    
+                    <option value='assistant'>Lab Assistant</option>
+                    <option value='admin'>Admin</option>
+                </Field>
+
+                <label>
+                    <span>Avatar Color:  </span>
+                    <span><Field type='color' name='color'/></span>
+                </label>
+
+                <label>
+                    <span>Profile Picture: </span>
+                    <span><Field type='file' name='new'/></span>
+                </label>
+
+                <label>
+                    <span>Experience Level (1-10): </span>
+                    <span><Field type='range' name="exp" min="0" max="10"/></span>
+                </label>
+
                 <label>
                     <span><Field type='checkbox' name='tos' checked={values.tos}/></span>
                     <span>Sign all your rights away.</span>
@@ -116,9 +143,13 @@ const UserForm = ({values, errors, touched, status}) => {
                     users.map(user => (
                         <li>
                             <div>
-                                <span>{user.name}</span>
+                                <span style={{color: `${user.color}`}}>{user.name}</span>
                                 <br/>
-                                <span className='email'>{user.email}</span>
+                                <span className='userInfo'>{user.email}</span>
+                                <br/>
+                                <span className='userInfo'>{user.role}</span>
+                                <br/>
+                                <span className='userInfo'>Exp: {user.exp}</span>
                             </div>
                         </li>
                     ))
@@ -130,18 +161,22 @@ const UserForm = ({values, errors, touched, status}) => {
 }
 
 export default withFormik({
-    mapPropsToValues({name, email, password, tos}){
+    mapPropsToValues({name, email, password, role, tos, color, exp}){
         return{
             name: name || '',
             email: email || '',
             password: password || '',
-            tos: tos || true
+            role: role || 'select',
+            tos: tos || true,
+            color: color,
+            exp: exp || 5
         }
     },
     validationSchema: Yup.object().shape({
         name: Yup.string().min(4,'Name must be at least 4 characters.').required('Name is required.'),
         email: Yup.string().email('Email must be valid.').required('Email is required.'),
-        password: Yup.string().min(8,'Password must be at least 8 characters.').required('Password is required.')
+        password: Yup.string().min(8,'Password must be at least 8 characters.').required('Password is required.'),
+        role: Yup.string().required()
     }),
     handleSubmit(values, {setStatus}){
         axios
