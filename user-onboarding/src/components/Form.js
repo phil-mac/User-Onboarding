@@ -4,31 +4,41 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 const UserForm = ({values, errors, touched, status}) => {
-    const [response, setResponse] = useState({});
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        status && setResponse(status)
+        status && setUsers([...users, status])
     }, [status])
 
     return(
-        <Form>
-            <Field type='text' name='name' placeholder='Name'/>
-            {touched.name && errors.name && <span>{errors.name}</span>}
-            <br />
-            <Field type='email' name='email' placeholder='Email'/>
-            {touched.email && errors.email && <span>{errors.email}</span>}
-            <br />
-            <Field type='password' name='password' placeholder='Password'/>
-            {touched.password && errors.password && <span>{errors.password}</span>}
-            <br />
-            <label>
-                <Field type='checkbox' name='tos' checked={values.tos}/>
-                Sign all your rights away.
-            </label>
-            <br />
-            <button type='submit'>Submit</button>
-        </Form>
-        
+        <div>
+            <Form>
+                <Field type='text' name='name' placeholder='Name'/>
+                {touched.name && errors.name && <span>{errors.name}</span>}
+                <br />
+                <Field type='email' name='email' placeholder='Email'/>
+                {touched.email && errors.email && <span>{errors.email}</span>}
+                <br />
+                <Field type='password' name='password' placeholder='Password'/>
+                {touched.password && errors.password && <span>{errors.password}</span>}
+                <br />
+                <label>
+                    <Field type='checkbox' name='tos' checked={values.tos}/>
+                    Sign all your rights away.
+                </label>
+                <br />
+                <button type='submit'>Submit</button>
+            </Form>
+            <div className='userList'>
+                <ul>
+                {
+                    users.map(user => (
+                        <li>{user.name}</li>
+                    ))
+                }
+                </ul>
+            </div>
+        </div>
     )
 }
 
