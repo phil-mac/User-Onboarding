@@ -29,11 +29,10 @@ const CustomUserForm = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        
     }
 
     .fieldWithError{
-        height: 50px;
+        height: 60px;
     }
 
     h2{
@@ -106,13 +105,16 @@ const UserForm = ({values, errors, touched, status}) => {
                     {touched.password && errors.password && <p className='error'>{errors.password}</p>}
                 </div>
 
-                <Field as='select' name='role' className='roleSelect'>
-                    <option disabled value='select'>Select a Role...</option>
-                    <option value='student'>Student</option>
-                    <option value='teacher'>Teacher</option>                    
-                    <option value='assistant'>Lab Assistant</option>
-                    <option value='admin'>Admin</option>
-                </Field>
+                <div className='fieldWithError'>
+                    <Field as='select' name='role' className='roleSelect'>
+                        <option disabled value=''>Select a Role...</option>
+                        <option value='student'>Student</option>
+                        <option value='teacher'>Teacher</option>                    
+                        <option value='assistant'>Lab Assistant</option>
+                        <option value='admin'>Admin</option>
+                    </Field>
+                    {touched.role && errors.role && <p className='error'>{errors.role}</p>}
+                </div>
 
                 <label>
                     <span>Avatar Color:  </span>
@@ -131,7 +133,7 @@ const UserForm = ({values, errors, touched, status}) => {
 
                 <label>
                     <span><Field type='checkbox' name='tos' checked={values.tos}/></span>
-                    <span>Sign all your rights away.</span>
+                    <span>Sign away all your rights.</span>
                 </label>
 
                 <button type='submit'><strong>Submit</strong></button>
@@ -166,7 +168,7 @@ export default withFormik({
             name: name || '',
             email: email || '',
             password: password || '',
-            role: role || 'select',
+            role: role || '',
             tos: tos || true,
             color: color,
             exp: exp || 5
